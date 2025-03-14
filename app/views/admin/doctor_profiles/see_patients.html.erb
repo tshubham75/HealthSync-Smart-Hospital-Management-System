@@ -1,0 +1,30 @@
+<h1 class="text-2xl font-bold mb-4">Doctor's Slots</h1>
+
+<table class="table-auto border-collapse border border-gray-300 w-full">
+  <thead class="bg-gray-200">
+    <tr>
+      <th class="border px-4 py-2">ID</th>
+      <th class="border px-4 py-2">Doctor Profile ID</th>
+      <th class="border px-4 py-2">Start Time</th>
+      <th class="border px-4 py-2">End Time</th>
+      <th class="border px-4 py-2">Patient Profile ID</th>
+      <th class="border px-4 py-2">User ID</th>
+      <th class="border px-4 py-2">Created At</th>
+      <th class="border px-4 py-2">Updated At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @slots.each do |slot| %>
+      <tr class="bg-white hover:bg-gray-100">
+        <td class="border px-4 py-2"><%= slot.id %></td>
+        <td class="border px-4 py-2"><%= slot.doctor_profile_id %></td>
+        <td class="border px-4 py-2"><%= slot.start_time.strftime("%Y-%m-%d %H:%M") %></td>
+        <td class="border px-4 py-2"><%= slot.end_time.present? ? slot.end_time.strftime("%Y-%m-%d %H:%M") : "Not decided yet" %></td>
+        <td class="border px-4 py-2"><%= slot.patient_profiles_id || "N/A" %></td>
+        <td class="border px-4 py-2"><%= slot.user_id || "N/A" %></td>
+        <td class="border px-4 py-2"><%= slot.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+        <td class="border px-4 py-2"><%= slot.updated_at.strftime("%Y-%m-%d %H:%M") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

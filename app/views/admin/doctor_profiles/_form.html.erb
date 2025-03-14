@@ -1,0 +1,63 @@
+<%= form_with(model: @doctor_profile, url: @doctor_profile.new_record? ? admin_doctor_profiles_path : admin_doctor_profile_path(@doctor_profile), method: @doctor_profile.new_record? ? :post : :patch, local: true, class: "max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md") do |f| %>
+  
+  <div class="space-y-4">
+    <div>
+      <%= f.label :first_name, "First Name", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :first_name, required: true, class: "w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300" %>
+    </div>
+
+    <div>
+      <%= f.label :middle_name, "Middle Name", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :middle_name, class: "w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300" %>
+    </div>
+
+    <div>
+      <%= f.label :last_name, "Last Name", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :last_name, required: true, class: "w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300" %>
+    </div>
+
+    <div>
+      <%= f.label :date_of_birth, "Date of Birth", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.date_field :date_of_birth, required: true, class: "w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300" %>
+    </div>
+
+    <div>
+      <%= f.label :contact_number, "Contact Number", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.telephone_field :contact_number, required: true, class: "w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300" %>
+    </div>
+
+    <div>
+      <%= f.label :nationality, "Nationality", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :nationality, class: "w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300" %>
+    </div>
+
+    <div>
+      <%= f.label :gender, "Gender", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.select :gender, ["Male", "Female", "Other"], prompt: "Select Gender", required: true, class: "w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300" %>
+    </div>
+
+    <div>
+      <%= f.label :qualifications, "Qualifications", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_area :qualifications, class: "w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300" %>
+    </div>
+
+    <div>
+      <%= f.label :experience, "Experience", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_area :experience, class: "w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300" %>
+    </div>
+
+    <div>
+      <%= f.label :email, "Email", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.email_field :email, required: true, class: "w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300" %>
+    </div>
+
+    <div>
+      <%= f.label :department_id, "Department", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.collection_select :department_id, Department.all, :id, :name, prompt: "Select Department", class: "w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300" %>
+    </div>
+  </div>
+
+  <div class="mt-6 flex justify-end">
+    <%= f.submit @doctor_profile.new_record? ? "Create Doctor Profile" : "Update Doctor Profile", class: "bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-200" %>
+  </div>
+<% end %>

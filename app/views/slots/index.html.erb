@@ -1,0 +1,100 @@
+<div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
+	<h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Available Slots</h1>
+
+	<table class="w-full border-collapse border border-gray-300 shadow-md rounded-lg overflow-hidden">
+		<thead class="bg-gray-100 text-gray-700">
+			<tr>
+				<th class="px-4 py-3 text-left border border-gray-300">Doctor</th>
+				<th class="px-4 py-3 text-left border border-gray-300">Start Time</th>
+				<th class="px-4 py-3 text-left border border-gray-300">End Time</th>
+				<th class="px-4 py-3 text-center border border-gray-300">Action</th>
+			</tr>
+		</thead>
+		<tbody class="text-gray-600">
+			<% @available_slots.each do |slot| %>
+			<tr class="hover:bg-gray-100 transition">
+				<td class="px-4 py-3 border border-gray-300"><%= slot.doctor_profile.first_name %> <%= slot.doctor_profile.last_name %></td>
+				<td class="px-4 py-3 border border-gray-300"><%= slot.start_time.strftime("%Y-%m-%d %H:%M") %></td>
+				<td class="px-4 py-3 border border-gray-300"><%= slot.end_time %></td>
+				<td class="px-4 py-3 border border-gray-300 text-center">
+					<% if current_user.role.in?(["admin", "patient"]) %>
+					<% button_class = slot.patient_profiles_id.present? ? "bg-red-500 hover:bg-red-600 text-white" : "bg-green-500 hover:bg-green-600 text-white" %>
+					<% if slot.attributes.values.any?(&:blank?) %>
+					<%= button_to "Book Slot", book_slot_path(slot), method: :patch, class: "px-4 py-2 text-sm font-medium rounded-lg shadow-sm #{button_class} transition" %>
+					<% else %>
+					<button type="button" 
+        class="px-4 py-2 text-sm font-medium rounded-lg shadow-sm bg-red-500 hover:bg-red-600 text-white transition booked-slot">
+  Book Slot
+</button>
+					<% end %>
+					<% end %>
+				</td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+	<div class="my-4">
+		<% if current_user&.role == "admin"%>
+		<%= link_to 'Create Slots', new_slot_path, method: :post, 
+		class: "rounded-full border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm 
+			hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 
+			focus:text-white focus:bg-slate-800 focus:border-slate-800 
+			active:border-slate-800 active:text-white active:bg-slate-800 
+			disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" %>
+			<% end %>	
+		</div>
+
+<!-- Popup Message -->
+	<div id="popup-message" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg hidden">
+		Slot already booked. Book available slot only.
+	</div>
+
+	</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const bookedButtons = document.querySelectorAll(".booked-slot");
+
+  bookedButtons.forEach(button => {
+    button.addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent any default action like form submission
+
+      // Remove any existing popup before adding a new one
+      let existingPopup = document.getElementById("slot-popup");
+      if (existingPopup) {
+        existingPopup.remove();
+      }
+
+      // Create the popup message
+      const popup = document.createElement("div");
+      popup.id = "slot-popup"; // Unique ID to prevent duplicates
+      popup.textContent = "This slot is already booked. Please select an available one.";
+
+      // Apply styles to make it more visible
+      Object.assign(popup.style, {
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        color: "#fff",
+        padding: "20px 30px",
+        borderRadius: "10px",
+        fontSize: "20px",
+        fontWeight: "bold",
+        zIndex: "1000",
+        textAlign: "center",
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)"
+      });
+
+      document.body.appendChild(popup);
+
+      // Remove popup after 2 seconds
+      setTimeout(() => {
+        popup.remove();
+      }, 2000);
+    });
+  });
+});
+
+
+</script>

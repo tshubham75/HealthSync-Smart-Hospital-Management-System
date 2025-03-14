@@ -1,0 +1,72 @@
+<div class="max-w-lg my-14 mx-auto bg-white shadow-xl rounded-lg p-8">
+  <h1 class="text-3xl font-extrabold text-gray-900 text-center mb-6">Patient Profile</h1>
+
+  <div class="space-y-4 text-gray-700">
+    <p class="flex items-center">
+      <span class="font-semibold w-32 text-gray-900">Name:</span>
+      <span><%= @patient.first_name %> <%= @patient.middle_name %> <%= @patient.last_name %></span>
+    </p>
+    <p class="flex items-center">
+      <span class="font-semibold w-32 text-gray-900">Date of Birth:</span>
+      <span><%= @patient.date_of_birth %></span>
+    </p>
+    <p class="flex items-center">
+      <span class="font-semibold w-32 text-gray-900">Contact:</span>
+      <span><%= @patient.contact_number %></span>
+    </p>
+    <p class="flex items-center">
+      <span class="font-semibold w-32 text-gray-900">Email:</span>
+      <span><%= @patient.email %></span>
+    </p>
+    <p class="flex items-center">
+      <span class="font-semibold w-32 text-gray-900">Gender:</span>
+      <span><%= @patient.gender %></span>
+    </p>
+    <p class="flex items-center">
+      <span class="font-semibold w-32 text-gray-900">Blood Group:</span>
+      <span><%= @patient.blood_group %></span>
+    </p>
+  </div>
+
+  <% if @patient.photo.attached? %>
+    <div class="mt-6 text-center">
+      <p class="font-semibold text-gray-900">Profile Photo:</p>
+      <div class="flex justify-center space-x-4 mt-3">
+        <%= image_tag @patient.photo, class: "w-24 h-24 rounded-full shadow-lg border border-gray-300" %>
+        <%= image_tag @patient.photo.variant(resize: "400x400"), class: "w-32 h-32 rounded-lg shadow-lg border border-gray-300" %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="mt-8 flex justify-center space-x-4">
+    <%= link_to "Back", patients_path, class: "px-6 py-2 text-sm font-semibold text-gray-700 border border-gray-400 rounded-lg shadow-md hover:bg-gray-400 hover:text-white transition duration-300" %>
+    
+    <%= link_to "Edit", edit_patient_path(@patient), class: "px-6 py-2 text-sm font-semibold text-yellow-700 border border-yellow-500 rounded-lg shadow-md hover:bg-yellow-500 hover:text-white transition duration-300" %>
+    
+    <%= link_to "View Slots", slots_index_path, class: "px-6 py-2 text-sm font-semibold text-blue-700 border border-blue-500 rounded-lg shadow-md hover:bg-blue-500 hover:text-white transition duration-300" %>
+  </div>
+
+  <div class="mt-10">
+    <h2 class="text-2xl font-extrabold text-gray-900 text-center">My Consultations</h2>
+    
+    <div class="flex justify-center mt-4">
+      <form method="get" action="<%= download_consultations_patients_path %>">
+        <div class="flex items-center justify-center space-x-4">
+          <label class="inline-flex items-center">
+            <input type="radio" name="format" value="pdf" checked class="form-radio text-blue-600">
+            <span class="ml-2 text-gray-700">PDF</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input type="radio" name="format" value="csv" class="form-radio text-blue-600">
+            <span class="ml-2 text-gray-700">CSV</span>
+          </label>
+        </div>
+        <div class="mt-4 text-center">
+          <button type="submit" class="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-6 py-2 rounded-lg shadow-md hover:from-blue-700 hover:to-blue-900 transition duration-300">
+            Download Consultations
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

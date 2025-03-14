@@ -1,0 +1,23 @@
+<h2 class="text-2xl font-bold mb-4">Assigned Patients</h2>
+
+<table class="table-auto w-full border-collapse border border-gray-300">
+  <thead>
+    <tr class="bg-gray-200">
+      <th class="border px-4 py-2">Patient Name</th>
+      <th class="border px-4 py-2">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @patients.each do |patient| %>
+      <tr>
+        <td class="border px-4 py-2"><%= patient.full_name %></td>
+        <td class="border px-4 py-2">
+          <%= link_to "Edit", edit_patient_path(patient), class: "text-blue-500" %> |
+          <%= link_to "View", patient_path(patient), class: "text-green-500" %> |
+          <%= link_to "Download CSV", download_patient_csv_doctor_path(patient.id), class: "text-red-500" %> |
+          <%= link_to "Download PDF", download_patient_pdf_doctor_path(patient.id), class: "text-purple-500" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

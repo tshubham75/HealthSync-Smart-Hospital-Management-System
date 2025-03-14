@@ -1,0 +1,69 @@
+<div class="max-w-3xl my-4 mx-auto bg-white shadow-lg rounded-lg p-8 mt-10">
+  <h1 class="text-4xl font-extrabold text-center text-gray-900 mb-8 border-b-2 pb-3">Consultation Details</h1>
+
+  <div class="mb-6 space-y-3">
+    <p class="text-lg font-semibold text-gray-700">Patient: <span class="font-normal text-gray-900"><%= @consultation.patient_profile.first_name %> <%= @consultation.patient_profile.last_name %></span></p>
+    <p class="text-lg font-semibold text-gray-700">Doctor: <span class="font-normal text-gray-900"><%= @consultation.doctor_profile.first_name %> <%= @consultation.doctor_profile.last_name %></span></p>
+  </div>
+
+  <div class="mb-6 space-y-4">
+    <div>
+      <p class="text-lg font-semibold text-gray-700">Condition:</p>
+      <p class="bg-gray-100 p-4 rounded-lg text-gray-900 shadow-sm"><%= @consultation.condition %></p>
+    </div>
+    <div>
+      <p class="text-lg font-semibold text-gray-700">Medication:</p>
+      <p class="bg-gray-100 p-4 rounded-lg text-gray-900 shadow-sm"><%= @consultation.medication %></p>
+    </div>
+    <div>
+      <p class="text-lg font-semibold text-gray-700">Comments:</p>
+      <p class="bg-gray-100 p-4 rounded-lg text-gray-900 shadow-sm"><%= @consultation.comments %></p>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap justify-center gap-4 mt-8">
+    <%= link_to 'Download PDF', download_patient_pdf_admin_doctor_profile_path(@consultation), 
+    class: 'bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition' %>
+    
+    <% if current_user.doctor_profiles.present? %>
+    <%= link_to 'Recommend Admission', admin_consultation_path(@consultation), method: :patch, 
+    class: 'bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition' %>
+    <% end %>
+
+    <%= link_to 'Back to Consultations', admin_consultations_path, 
+    class: 'bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition' %>
+  </div>
+
+  <h3 class="text-2xl font-bold text-gray-800 mt-10 border-b pb-2">Assign Patient to a Bed</h3>
+  
+  <div id="bed-selection" class="mt-4">
+    <%= form_with url: toggle_bed_assignment_admin_consultation_path(@consultation), method: :patch, remote: true, id: "bed-assignment-form", class: "space-y-4" do %>
+    <div class="flex items-center gap-4">
+      <%= select_tag :bed_id, options_from_collection_for_select(
+        @available_beds, 
+        :id, 
+        :bed_number, 
+        @assigned_bed&.id
+        ), { prompt: "Select a Bed", class: "form-control px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" } %>
+
+      <%= submit_tag @assigned_bed ? "Change Bed" : "Assign Bed", 
+      class: "bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition" %>
+    </div>
+    <% end %>
+  </div>
+  
+  <% if current_user&.role.in? ['admin', 'doctor']%>
+  <h4 class="text-lg font-bold text-gray-800 mt-6">Currently Assigned Bed:</h4>
+  <p id="assigned-bed" class="text-gray-900 bg-gray-100 p-4 rounded-lg shadow-sm">
+    <% if @assigned_bed %>
+    Bed <%= @assigned_bed.bed_number %>
+    <%= button_to "Remove", toggle_bed_assignment_admin_consultation_path(@consultation, bed_id: nil), 
+    method: :patch, remote: true, class: "ml-4 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition", 
+    data: { confirm: "Remove this patient from bed?" } %>
+    <% else %>
+    No bed assigned
+    <% end %>
+    <%else%>
+    <% end %>
+  </p>
+</div>

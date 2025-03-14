@@ -1,0 +1,20 @@
+<h1>New Doctor</h1>
+
+<%= form_with model: @doctor_profile, url: @doctor_profile.new_record? ? admin_doctor_profiles_path : admin_doctor_profile_path(@doctor_profile), local: true, method: @doctor_profile.new_record? ? :post : :patch do |f| %>
+
+  <div class="field">
+    <%= f.label :email %> <%= f.email_field :email, required: true %>
+    <%= f.label :first_name %> <%= f.text_field :first_name, required: true %>
+    <%= f.label :middle_name %> <%= f.text_field :middle_name %>
+    <%= f.label :last_name %> <%= f.text_field :last_name, required: true %>
+    <%= f.label :date_of_birth %> <%= f.date_field :date_of_birth, required: true %>
+    <%= f.label :contact_number %> <%= f.text_field :contact_number, required: true %>
+    <%= f.label :nationality %> <%= f.text_field :nationality, required: true %>
+    <%= f.label :gender %> <%= f.select :gender, [['Male', 'Male'], ['Female', 'Female'], ['Other', 'Other']], required: true %>
+    <%= f.label :qualifications %> <%= f.text_area :qualifications, required: true %>
+    <%= f.label :experience %> <%= f.text_area :experience, required: true %>
+  </div>
+  <%= f.submit @doctor_profile.new_record? ? 'Create Doctor' : 'Update Doctor', class: 'btn btn-success' %>
+<% end %>
+
+<%= link_to 'Back', admin_doctors_path, class: 'btn btn-secondary' %>

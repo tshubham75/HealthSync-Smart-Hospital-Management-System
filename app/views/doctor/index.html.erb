@@ -1,0 +1,30 @@
+<h1>Doctors List</h1>
+<%= link_to 'New Doctor', new_admin_doctor_path, class: 'btn btn-primary' %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Contact Number</th>
+      <th>Nationality</th>
+      <th>Qualifications</th>
+      <th>Experience</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @doctors.each do |doctor| %>
+      <tr>
+        <td><%= doctor.doctor_profile&.first_name %> <%= doctor.doctor_profile&.last_name %></td>
+        <td><%= doctor.email %></td>
+        <td><%= doctor.doctor_profile&.contact_number %></td>
+        <td><%= doctor.doctor_profile&.nationality %></td>
+        <td><%= doctor.doctor_profile&.qualifications %></td>
+        <td><%= doctor.doctor_profile&.experience %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<style type="text/css">
+  
+</style>

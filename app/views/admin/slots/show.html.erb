@@ -1,0 +1,24 @@
+<h1>Slot Details</h1>
+
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Doctor Profile</th>
+    <th>Start Time</th>
+    <th>End Time</th>
+    <th>Created At</th>
+    <th>Updated At</th>
+    <th>User ID</th>
+    <th>Patient Profile ID</th>
+  </tr>
+  <tr>
+    <td><%= @slot.id %></td>
+    <td><%= @slot.doctor_profile_id %></td>
+    <td><%= @slot.start_time %></td>
+    <td><%= @slot.end_time %></td>
+    <td><%= @slot.created_at %></td>
+    <td><%= @slot.updated_at %></td>
+    <td><%= @slot.user_id %></td>
+    <td><%= @slot.patient_profiles_id %></td>
+  </tr>
+</table>

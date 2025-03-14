@@ -1,0 +1,9 @@
+<h1>Room Details</h1>
+
+<p><strong>ID:</strong> <%= @room.id %></p>
+<p><strong>Department ID:</strong> <%= @room.department_id %></p>
+<p><strong>Room Number:</strong> <%= @room.room_number %></p>
+<p><strong>User ID:</strong> <%= @room.user_id || "N/A" %></p>
+
+<%= link_to 'Back', admin_rooms_path %> |
+<%= link_to 'Edit', edit_admin_room_path(@room) %>

@@ -1,0 +1,114 @@
+class Admin::DoctorProfilesController < ApplicationController
+  # before_action :authenticate_user!
+  before_action :authorize_admin! 
+
+  def index
+    @doctor_profile = current_user.doctor_profiles
+  end
+
+  def show 
+    @doctor_profile = DoctorProfile.find(params[:id])
+  end
+
+  def new
+    @doctor_profile =  DoctorProfile.new
+  end
+
+  def create
+    
+    password = Devise.friendly_token.first(12)
+    name = if params.dig(:user, :doctor_profile)
+      params[:user][:doctor_profile].values_at(:first_name, :last_name).compact.join(" ")
+    elsif params.dig(:doctor_profile, :doctor_profile)
+      params[:doctor_profile][:doctor_profile].values_at(:first_name, :last_name).compact.join(" ")
+    else
+      nil
+    end
+
+    email = if params.dig(:doctor_profile, :email)
+      params.dig(:doctor_profile, :email)
+    else
+      params.dig(:user, :email)
+    end 
+    
+    @doctor_profile = User.new(role: :doctor,email: email ,password: password, password_confirmation: password, name: name)
+    if current_user.role == 'admin'
+      if @doctor_profile.save 
+        doctor_profile_attributes = user_params # This will now only contain doctor_profile's attributes
+        doctor_profile_attributes
+        
+        @doctor_profile_profile = DoctorProfile.new(doctor_profile_attributes)
+        
+        @doctor_profile_profile.save
+        DoctorMailer.credentials_email(@doctor_profile, password).deliver_later
+        redirect_to admin_doctors_path, notice: 'Doctor created successfully'
+      else
+        flash[:alter] = @doctor_profile.errors.full_messages
+        render :new, status: :unprocessable_entity
+      end
+    else
+      render :new, errors: "Your not allowed to create an Doctor Record"
+    end
+  end
+
+  def edit
+    @doctor_profile = DoctorProfile.find(params[:id])
+  end
+
+  def update
+    @doctor_profile =DoctorProfile.find[params[:id]]
+    
+    if @doctor_profile.update(user_params)
+      redirect_to admin_doctor_path(@doctor_profile), notice: "Doctor updated successfully."
+    else
+      flash[:alert] = @doctor_profile.errors.full_messages.join(", ")
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @doctor_profile = DoctorProfile.find(params[:id])
+    @doctor_profile.destroy
+    redirect_to admin_doctors_path, notice: "Doctor deleted successfully."
+  end
+
+  def see_patients
+    @slots = Slot.where(doctor_profile_id: params[:doctor_id])
+  end
+
+  private
+
+  def user_params
+
+    params_key = params[:user] ? :user : :doctor_profile
+    params[params_key][:doctor_profile][:creator_id] = current_user.id
+    params[params_key][:doctor_profile][:updator_id] = current_user.id
+
+    permitted_params = params.require(params_key).permit(:email, :user_id, doctor_profile: [
+      :first_name, :middle_name, :last_name, 
+      :date_of_birth, :contact_number, 
+      :nationality, :gender, :qualifications, 
+      :experience, :creator_id, :updator_id, :email
+    ])
+
+    permitted_params[:doctor_profile]["user_id"] = @doctor_profile.id
+
+    permitted_params[:doctor_profile] || {}
+  end
+
+  def authorize_admin!
+  return if current_user&.role == 'admin' # Admin can do anything
+
+  if current_user&.role == 'doctor'
+    doctor = DoctorProfile.find_by(user_id: current_user.id)
+    if !params[:action].in? ["index","new","create"]
+      return
+    else
+      redirect_to admin_doctor_profile_path(doctor), alert: "You are not authorized to access this page."
+    end
+  else
+    redirect_to patient_path, alert: "You are not authorized to access this page."
+  end
+end
+
+end

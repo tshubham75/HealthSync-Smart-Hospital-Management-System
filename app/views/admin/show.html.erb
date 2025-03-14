@@ -1,0 +1,18 @@
+<div class="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6">
+  <h1 class="text-3xl font-bold text-gray-800 mb-4">
+    <%= @doctor.first_name %> <%= @doctor.last_name %>
+  </h1>
+
+  <div class="space-y-2 text-gray-700">
+    <p><strong class="font-semibold">Email:</strong> <%= @doctor.user.email %></p>
+    <p><strong class="font-semibold">Contact Number:</strong> <%= @doctor.contact_number %></p>
+    <p><strong class="font-semibold">Experience:</strong> <%= @doctor.experience %> years</p>
+    <p><strong class="font-semibold">Qualifications:</strong> <%= @doctor.qualifications %></p>
+  </div>
+
+  <div class="mt-6 flex space-x-4">
+    <%= link_to "Edit", edit_admin_doctor_path(@doctor), class: "px-4 py-2 text-sm font-medium text-yellow-600 border border-yellow-500 rounded-lg hover:bg-yellow-500 hover:text-white transition" %>
+    
+    <%= link_to "Back", admin_doctors_path, class: "px-4 py-2 text-sm font-medium text-blue-600 border border-blue-500 rounded-lg hover:bg-blue-500 hover:text-white transition" %>
+  </div>
+</div>

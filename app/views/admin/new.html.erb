@@ -1,0 +1,46 @@
+<h1>New Doctor</h1>
+
+<%= form_with model: @user, url: admin_doctors_path, local: true do |f| %>
+  <div class="field">
+    <%= f.label :email %>
+    <%= f.email_field :email, required: true %>
+  </div>
+
+  <h3>Doctor Profile</h3>
+  <div class="field">
+    <%= f.fields_for :doctor_profile do |dp| %>
+      <%= dp.hidden_field :user_id, value: current_user.id %> <!-- Assign current_user.id -->
+      
+      <%= dp.label :first_name %>
+      <%= dp.text_field :first_name, required: true %>
+
+      <%= dp.label :middle_name %>
+      <%= dp.text_field :middle_name %>
+
+      <%= dp.label :last_name %>
+      <%= dp.text_field :last_name, required: true %>
+
+      <%= dp.label :date_of_birth %>
+      <%= dp.date_field :date_of_birth, required: true %>
+
+      <%= dp.label :contact_number %>
+      <%= dp.text_field :contact_number, required: true %>
+
+      <%= dp.label :nationality %>
+      <%= dp.text_field :nationality, required: true %>
+
+      <%= dp.label :gender %>
+      <%= dp.select :gender, ['Male', 'Female', 'Other'], required: true %>
+
+      <%= dp.label :qualifications %>
+      <%= dp.text_area :qualifications, required: true %>
+
+      <%= dp.label :experience %>
+      <%= dp.text_area :experience, required: true %>
+    <% end %>
+  </div>
+
+  <%= f.submit 'Create Doctor', class: 'btn btn-success' %>
+<% end %>
+
+<%= link_to 'Back', admin_doctors_path, class: 'btn btn-secondary' %>

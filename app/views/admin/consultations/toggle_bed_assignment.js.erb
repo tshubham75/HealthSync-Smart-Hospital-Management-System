@@ -1,0 +1,5 @@
+// Update the bed selection dropdown
+$("#bed-selection").html("<%= j render partial: 'bed_selection', locals: { available_beds: @available_beds, assigned_bed: @assigned_bed } %>");
+
+// Update the assigned bed section
+$("#assigned-bed").html("<%= j render partial: 'assigned_bed', locals: { assigned_bed: @assigned_bed } %>");

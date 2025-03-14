@@ -1,0 +1,48 @@
+<div class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-6">
+  <h1 class="text-3xl font-bold text-center text-gray-800 mb-6 border-b pb-2">Consultation Records</h1>
+
+  <!-- Add Consultation Button (Aligned to the Right) -->
+  <div class="flex justify-end mb-6">
+    <% if current_user.role.in? ['admin', 'doctor'] %>
+      <%= link_to 'Add Consultation', new_admin_consultation_path, 
+        class: 'bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-md shadow-md transition' %>
+    <% end %>
+  </div>
+
+  <!-- Consultation Table -->
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden border border-gray-300">
+      <thead class="bg-gray-200 text-gray-700 uppercase tracking-wider">
+        <tr>
+          <th class="py-3 px-4 text-left">Patient</th>
+          <th class="py-3 px-4 text-left">Doctor</th>
+          <th class="py-3 px-4 text-left">Condition</th>
+          <th class="py-3 px-4 text-left">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-800">
+        <% @consultations&.each do |consultation| %>
+          <tr class="border-b hover:bg-gray-100">
+            <td class="py-3 px-4"><%= consultation.patient_profile&.first_name %> <%= consultation.patient_profile&.last_name %></td>
+            <td class="py-3 px-4"><%= consultation.doctor_profile&.first_name %> <%= consultation.doctor_profile&.last_name %></td>
+            <td class="py-3 px-4"><%= consultation.condition %></td>
+            <td class="py-3 px-4">
+              <div class="flex gap-2">
+                <%= link_to 'View', admin_consultation_path(consultation), 
+                  class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition' %>
+
+                <% if current_user&.role.in?(['doctor', 'admin']) %>
+                  <%= link_to 'Edit', edit_admin_consultation_path(consultation), 
+                    class: 'bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition' %>
+
+                  <%= link_to 'Delete', admin_destroy_path(consultation), method: :delete, data: { confirm: 'Are you sure?' }, 
+                    class: 'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition' %>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

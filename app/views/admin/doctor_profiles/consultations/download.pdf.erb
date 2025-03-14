@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Medical Report</title>
+  </head>
+  <body>
+    <h1>Medical Report</h1>
+    
+    <div class="patient-info">
+      <h2>Patient Details</h2>
+      <p>Name: <%= @consultation.patient_profile.full_name %></p>
+      <p>DOB: <%= @consultation.patient_profile.date_of_birth %></p>
+    </div>
+
+    <div class="consultation-details">
+      <h2>Consultation Details</h2>
+      <p>Date: <%= @consultation.created_at %></p>
+      <p>Condition: <%= @consultation.condition %></p>
+      <p>Medication: <%= @consultation.medication %></p>
+      <p>Comments: <%= @consultation.comments %></p>
+    </div>
+  </body>
+</html>

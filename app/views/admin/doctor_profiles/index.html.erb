@@ -1,0 +1,28 @@
+<h1 class="text-2xl font-bold mb-4">Doctors</h1>
+
+<table class="table-auto border-collapse border border-gray-300 w-full">
+  <thead class="bg-gray-200">
+    <tr>
+      <th class="border px-4 py-2">ID</th>
+      <th class="border px-4 py-2">Name</th>
+      <th class="border px-4 py-2">Email</th>
+      <th class="border px-4 py-2">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @doctor_profiles.each do |doctor| %>
+      <tr class="bg-white hover:bg-gray-100">
+        <td class="border px-4 py-2"><%= doctor.id %></td>
+        <td class="border px-4 py-2"><%= doctor.first_name %> <%= doctor.last_name %></td>
+        <td class="border px-4 py-2"><%= doctor.user.email %></td>
+        <td class="border px-4 py-2">
+          <%= link_to "View", admin_doctor_profile_path(doctor), class: "text-blue-500" %> |
+          <%= link_to "Edit", edit_admin_doctor_profile_path(doctor), class: "text-yellow-500" %> |
+          <%= button_to "Delete", admin_admin_doctor_profile_delete_path(doctor), method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-500" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "Add Doctor", new_admin_doctor_profile_path, class: "mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded" %>

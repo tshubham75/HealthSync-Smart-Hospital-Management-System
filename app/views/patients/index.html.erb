@@ -1,0 +1,41 @@
+<% if current_user.role == "admin" %>
+  <div class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-10">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Patient Profiles</h1>
+    <%= link_to "New Patient", new_patient_path, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md mb-4 inline-block" %>
+
+    <div class="overflow-x-auto">
+      <table class="w-full bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
+        <thead class="bg-gray-200 text-gray-700">
+          <tr>
+            <th class="py-3 px-4 text-left">Name</th>
+            <th class="py-3 px-4 text-left">Date of Birth</th>
+            <th class="py-3 px-4 text-left">Contact</th>
+            <th class="py-3 px-4 text-left">Email</th>
+            <th class="py-3 px-4 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @patients.each do |patient| %>
+            <tr class="border-t border-gray-300 hover:bg-gray-100">
+              <td class="py-3 px-4"><%= patient.first_name %> <%= patient.last_name %></td>
+              <td class="py-3 px-4"><%= patient.date_of_birth %></td>
+              <td class="py-3 px-4"><%= patient.contact_number %></td>
+              <td class="py-3 px-4"><%= patient.email %></td>
+              <td class="py-3 px-4 flex space-x-2">
+                <%= link_to "Show", patient_path(patient), class: "bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm shadow" %>
+                <%= link_to "Edit", edit_patient_path(patient), class: "bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded text-sm shadow" %>
+                <%= link_to "Delete", patient_path(patient), method: :delete, data: { confirm: "Are you sure?" }, class: "bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm shadow" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+<% else %>
+  <script>
+    alert("Access denied! Redirecting to the previous page.");
+    window.history.back();
+  </script>
+<% end %>

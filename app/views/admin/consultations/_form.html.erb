@@ -1,0 +1,52 @@
+<%= form_with(model: @consultation, url: @consultation.persisted? ? admin_consultation_path(@consultation) : admin_consultations_path, local: true) do |f| %>
+
+<%if current_user&.role == 'admin' %>
+<div class="mb-4">
+  <%= f.label :doctor_profile_id, "Select Patient", class: "block text-sm font-medium text-gray-700" %>
+  <%= f.collection_select :doctor_profile_id, 
+  DoctorProfile.includes(:department).map { |doc| [ "#{[doc.first_name, doc.middle_name, doc.last_name].compact.join(' ')} - #{doc.department.name}", doc.id ] }, 
+  :second, :first, 
+  { prompt: "Select Doctor" }, 
+  class: "w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none" %>
+</div>
+<% elsif current_user&.role == 'doctor' %>
+<%= f.label :doctor_profile_id, "Doctor", class: "block text-sm font-medium text-gray-700" %>
+<%= f.select :doctor_profile_id, 
+options_for_select(DoctorProfile.where(department_id: current_user.doctor_profiles.first.department_id)
+  .map { |doc| ["#{[doc.first_name, doc.middle_name, doc.last_name].compact.join(' ')}", doc.id] }, 
+      current_user.doctor_profiles.first.id), # Pre-selected value
+{ prompt: "Select Doctor" }, 
+{ class: "w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none", disabled: true } 
+%>
+
+<!-- Hidden field to ensure doctor_profile_id is sent in params -->
+
+<%= f.hidden_field :doctor_profile_id, value: current_user.doctor_profiles.first.id %>
+<% end %>
+
+<div class="mb-4">
+  <%= f.label :patient_profile_id, "Select Patient", class: "block text-sm font-medium text-gray-700" %>
+  <%= f.collection_select :patient_profile_id, 
+  PatientProfile.all.map { |patient| [ "#{[patient.first_name, patient.middle_name, patient.last_name].compact.join(' ')} - #{patient.email.strip}", patient.id ] }, 
+  :second, :first, 
+  { prompt: "Select Patient" }, 
+  class: "w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none" %>
+</div>
+
+<div class="mb-4">
+  <%= f.label :condition, "Condition", class: "block text-sm font-medium text-gray-700" %>
+  <%= f.text_area :condition, class: "block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500", rows: 3 %>
+</div>
+
+<div class="mb-4">
+  <%= f.label :medication, "Medication", class: "block text-sm font-medium text-gray-700" %>
+  <%= f.text_area :medication, class: "block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500", rows: 3 %>
+</div>
+
+<div class="mb-4">
+  <%= f.label :comments, "Additional Comments", class: "block text-sm font-medium text-gray-700" %>
+  <%= f.text_area :comments, class: "block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500", rows: 3 %>
+</div>
+
+<%= f.submit "Save Consultation", class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md shadow-md" %>
+<% end %>

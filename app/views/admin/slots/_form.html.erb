@@ -1,0 +1,29 @@
+<%= form_with(model: @slot, url: (!@slot.present? || @slot.new_record?) ? new_admin_slot_path : admin_update_slot_path(@slot), local: true) do |f| %>
+
+  <div class="">
+    <%= f.label :doctor_profile_id %>
+    <%= f.text_field :doctor_profile_id %>
+  </div>
+
+  <div class="">
+    <%= f.label :start_time %>
+    <%= f.datetime_field :start_time %>
+  </div>
+
+  <div class="">
+    <%= f.label :end_time %>
+    <%= f.datetime_field :end_time %>
+  </div>
+
+  <div class="">
+    <%= f.label :user_id %>
+    <%= f.text_field :user_id %>
+  </div>
+
+  <div class="">
+    <%= f.submit "Submit" %>
+  </div>
+
+<% end %>
+
+<%# #ternary used to create new in true or left condition and to update the exiting one right and false condition %>

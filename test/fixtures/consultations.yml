@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  doctor_profile: one
+  patient_profile: one
+  comments: MyText
+  condition: MyText
+  medication: MyText
+
+two:
+  doctor_profile: two
+  patient_profile: two
+  comments: MyText
+  condition: MyText
+  medication: MyText
